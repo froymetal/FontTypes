@@ -22,6 +22,8 @@ struct ContentView: View {
     
     @StateObject private var favoriteFontsManager = FavoriteFontsManager()
     @State private var fontSize: CGFloat = 16
+    @State private var fontToRemove: String? = nil
+    @State private var showRemoveAlert = false
     
     var sortedFonts: [String] {
         allFonts.sorted { font1, font2 in
@@ -61,7 +63,12 @@ struct ContentView: View {
                             Spacer()
                             
                             Button(action: {
-                                favoriteFontsManager.toggleFavorite(fontName)
+                                if favoriteFontsManager.isFavorite(fontName) {
+                                    fontToRemove = fontName
+                                    showRemoveAlert = true
+                                } else {
+                                    favoriteFontsManager.addFavorite(fontName)
+                                }
                             }) {
                                 Image(systemName: favoriteFontsManager.isFavorite(fontName) ? "star.fill" : "star")
                                     .foregroundColor(favoriteFontsManager.isFavorite(fontName) ? .yellow : .gray)
@@ -101,6 +108,19 @@ struct ContentView: View {
                 .padding(.vertical, 12)
                 .background(Color(.systemBackground))
                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: -2)
+            }
+            .alert("Remove from Favorites", isPresented: $showRemoveAlert) {
+                Button("Cancel", role: .cancel) {
+                    fontToRemove = nil
+                }
+                Button("Remove", role: .destructive) {
+                    if let fontName = fontToRemove {
+                        favoriteFontsManager.removeFavorite(fontName)
+                    }
+                    fontToRemove = nil
+                }
+            } message: {
+                Text("Are you sure you want to remove this font from favorites?")
             }
         }
     }
