@@ -21,6 +21,7 @@ struct ContentView: View {
     }()
     
     @StateObject private var favoriteFontsManager = FavoriteFontsManager()
+    @State private var fontSize: CGFloat = 16
     
     var sortedFonts: [String] {
         allFonts.sorted { font1, font2 in
@@ -49,11 +50,11 @@ struct ContentView: View {
                                     .foregroundColor(.primary)
                                 
                                 Text(sampleText.uppercased())
-                                    .font(.custom(fontName, size: 16))
+                                    .font(.custom(fontName, size: fontSize))
                                     .foregroundColor(.secondary)
                                 
                                 Text(sampleText)
-                                    .font(.custom(fontName, size: 16))
+                                    .font(.custom(fontName, size: fontSize))
                                     .foregroundColor(.secondary)
                             }
                             
@@ -77,8 +78,30 @@ struct ContentView: View {
                     }
                 }
                 .padding()
+                .padding(.bottom, 100)
             }
             .navigationTitle("Tipos de Fuentes iOS")
+            .safeAreaInset(edge: .bottom) {
+                VStack(spacing: 8) {
+                    HStack {
+                        Text("Tamaño de fuente")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Text("\(Int(fontSize))")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .frame(minWidth: 30)
+                    }
+                    .padding(.horizontal)
+                    
+                    Slider(value: $fontSize, in: 10...40, step: 1)
+                        .padding(.horizontal)
+                }
+                .padding(.vertical, 12)
+                .background(Color(.systemBackground))
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: -2)
+            }
         }
     }
 }
