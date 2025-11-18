@@ -1,7 +1,7 @@
 
 FontTypes
 
-This apps shows all the font types we have in our Apple device, with this we can choose any of them and apply in out application
+This app shows all the font types we have in our Apple device, with this we can choose any of them and apply in out application
 
 
 Code Example in SwiftUI
